@@ -24,6 +24,10 @@
   66% { transform: translate(-20px, 18px) scale(0.94); }
 }
 
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

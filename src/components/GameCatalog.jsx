@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import GameCoverArt from './GameCoverArt.jsx'
+import GameCoverImage from './GameCoverImage.jsx'
 import { GAMES } from '../data/games.js'
 
 function formatIDR(n) {
@@ -31,7 +31,7 @@ export default function GameCatalog({ onSelectGame }) {
             >
               <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/8]">
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
-                  <GameCoverArt id={game.id} />
+                  <GameCoverImage game={game} />
                 </motion.div>
                 {game.verified && (
                   <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-ink/80 px-3 py-1 text-[11px] font-bold text-white backdrop-blur">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import GameCoverArt from './GameCoverArt.jsx'
+import GameCoverImage from './GameCoverImage.jsx'
 import { useTransactions } from '../TransactionsContext.jsx'
 
 const PAY_METHODS = [
@@ -73,7 +73,7 @@ export default function TransactionView({ game, onBack, onViewHistory }) {
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-8 overflow-hidden rounded-[2rem] border border-border-soft bg-surface shadow-sm">
             <div className="aspect-[4/3]">
-              <GameCoverArt id={game.id} />
+              <GameCoverImage game={game} />
             </div>
             <div className="p-6">
               <h2 className="text-xl font-bold text-ink">{game.short}</h2>
