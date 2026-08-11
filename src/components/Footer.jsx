@@ -1,39 +1,21 @@
-import { useToast } from '../ToastContext.jsx'
-
 export default function Footer({ onViewHistory }) {
-  const toast = useToast()
   return (
-    <footer className="footer">
-      <div className="footer-top">
-        <div className="footer-brand">
-          <span className="brand-mark">G.</span>
-          <span className="brand-name">GACOR<em>.GG</em></span>
-          <p>Platform top up game buat gamer yang ga suka nunggu.</p>
+    <footer className="border-t border-border-soft bg-surface">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 py-10 sm:flex-row">
+        <div className="flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-pink text-sm font-extrabold text-white">
+            S
+          </span>
+          <span className="text-base font-extrabold text-ink">Synectra</span>
         </div>
-        <div className="footer-cols">
-          <div>
-            <h5>Produk</h5>
-            <a href="#games">Katalog Game</a>
-            <a href="#pembayaran">Metode Pembayaran</a>
-            <a href="#promo">Promo</a>
-            <a href="#cara">Cara Top Up</a>
-          </div>
-          <div>
-            <h5>Bantuan</h5>
-            <a href="#faq">FAQ</a>
-            <a onClick={onViewHistory}>Riwayat Transaksi</a>
-            <a onClick={() => toast('Live chat CS ada di versi lengkap 💬')}>Hubungi CS</a>
-          </div>
-          <div>
-            <h5>Metode Bayar</h5>
-            <div className="pay-badges">
-              <span>GoPay</span><span>DANA</span><span>OVO</span><span>ShopeePay</span><span>QRIS</span><span>VA</span>
-            </div>
-          </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium text-ink-soft">
+          <a href="#catalog" className="hover:text-ink">Catalog</a>
+          <a href="#how-it-works" className="hover:text-ink">How it works</a>
+          <button onClick={onViewHistory} className="hover:text-ink">My Orders</button>
         </div>
-      </div>
-      <div className="footer-bottom">
-        <span>© 2026 GACOR.GG — Prototipe tampilan (React), bukan layanan transaksi sungguhan.</span>
+
+        <p className="text-xs text-ink-soft">© 2026 Synectra — UI prototype, not a real payment service.</p>
       </div>
     </footer>
   )

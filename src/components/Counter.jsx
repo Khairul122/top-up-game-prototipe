@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function Counter({ target, decimals = 0, duration = 1600, suffix = '' }) {
+export default function Counter({ target, decimals = 0, duration = 1600, prefix = '', suffix = '', className = '' }) {
   const ref = useRef(null)
   const [started, setStarted] = useState(false)
   const [val, setVal] = useState(0)
@@ -38,7 +38,8 @@ export default function Counter({ target, decimals = 0, duration = 1600, suffix 
   const display = decimals > 0 ? val.toFixed(decimals) : Math.floor(val).toLocaleString('id-ID')
 
   return (
-    <span ref={ref} className="stat-num">
+    <span ref={ref} className={className}>
+      {prefix}
       {display}
       {suffix}
     </span>

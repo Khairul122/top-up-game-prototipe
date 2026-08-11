@@ -1,108 +1,79 @@
-import { useEffect, useRef, useState } from 'react'
-import { ToastProvider } from './ToastContext.jsx'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { TransactionsProvider } from './TransactionsContext.jsx'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
-import Marquee from './components/Marquee.jsx'
-import GamesSection from './components/GamesSection.jsx'
-import WhySection from './components/WhySection.jsx'
-import StepsSection from './components/StepsSection.jsx'
-import PaymentMethods, { PaymentMarquee } from './components/PaymentMethods.jsx'
-import PromoBand from './components/PromoBand.jsx'
-import Testimonials from './components/Testimonials.jsx'
-import FAQ from './components/FAQ.jsx'
+import FeatureHighlights from './components/FeatureHighlights.jsx'
+import GameCatalog from './components/GameCatalog.jsx'
+import KPIStats from './components/KPIStats.jsx'
 import Footer from './components/Footer.jsx'
-import OrderModal from './components/OrderModal.jsx'
+import TransactionView from './components/TransactionView.jsx'
 import HistoryPage from './components/HistoryPage.jsx'
-import { GAMES } from './data/games.js'
 
-function CursorGlow() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el || window.matchMedia('(pointer: coarse)').matches) return
-    function onMove(e) {
-      el.style.left = e.clientX + 'px'
-      el.style.top = e.clientY + 'px'
-      el.style.opacity = 1
-    }
-    function onLeave() {
-      el.style.opacity = 0
-    }
-    window.addEventListener('mousemove', onMove)
-    document.addEventListener('mouseleave', onLeave)
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      document.removeEventListener('mouseleave', onLeave)
-    }
-  }, [])
-  return <div ref={ref} className="cursor-glow" />
+function LandingView({ onSelectGame, onViewHistory }) {
+  return (
+    <>
+      <Navbar onGoHome={() => {}} onViewHistory={onViewHistory} />
+      <main>
+        <Hero onExploreCatalog={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })} />
+        <GameCatalog onSelectGame={onSelectGame} />
+        <FeatureHighlights />
+        <KPIStats />
+      </main>
+      <Footer onViewHistory={onViewHistory} />
+    </>
+  )
 }
 
 function AppInner() {
+  const [currentView, setCurrentView] = useState('landing')
   const [selectedGame, setSelectedGame] = useState(null)
-  const [page, setPage] = useState('home')
-
-  useEffect(() => {
-    document.body.style.overflow = selectedGame ? 'hidden' : ''
-  }, [selectedGame])
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [page])
-
-  const marqueeItems = GAMES.map((g) => g.name.toUpperCase())
-
-  function goHistory() {
-    setSelectedGame(null)
-    setPage('history')
-  }
+  }, [currentView])
 
   function goHome() {
-    setPage('home')
+    setSelectedGame(null)
+    setCurrentView('landing')
   }
 
-  if (page === 'history') {
-    return (
-      <>
-        <div className="grain" />
-        <HistoryPage onBack={goHome} />
-        <Footer onViewHistory={goHistory} />
-      </>
-    )
+  function goHistory() {
+    setCurrentView('history')
+  }
+
+  function selectGame(game) {
+    setSelectedGame(game)
+    setCurrentView('transaction')
   }
 
   return (
-    <>
-      <div className="grain" />
-      <CursorGlow />
-      <Navbar onViewHistory={goHistory} />
-      <main id="top">
-        <Hero />
-        <Marquee items={marqueeItems} />
-        <GamesSection onSelect={setSelectedGame} />
-        <WhySection />
-        <StepsSection />
-        <PaymentMethods />
-        <PaymentMarquee />
-        <PromoBand />
-        <Testimonials />
-        <FAQ />
-      </main>
-      <Footer onViewHistory={goHistory} />
-      {selectedGame && (
-        <OrderModal game={selectedGame} onClose={() => setSelectedGame(null)} onViewHistory={goHistory} />
-      )}
-    </>
+    <div className="min-h-screen bg-bg">
+      <AnimatePresence mode="wait">
+        {currentView === 'landing' && (
+          <motion.div key="landing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            <LandingView onSelectGame={selectGame} onViewHistory={goHistory} />
+          </motion.div>
+        )}
+        {currentView === 'transaction' && selectedGame && (
+          <motion.div key="transaction" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            <TransactionView game={selectedGame} onBack={goHome} onViewHistory={goHistory} />
+          </motion.div>
+        )}
+        {currentView === 'history' && (
+          <motion.div key="history" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            <HistoryPage onBack={goHome} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
 export default function App() {
   return (
-    <ToastProvider>
-      <TransactionsProvider>
-        <AppInner />
-      </TransactionsProvider>
-    </ToastProvider>
+    <TransactionsProvider>
+      <AppInner />
+    </TransactionsProvider>
   )
 }
