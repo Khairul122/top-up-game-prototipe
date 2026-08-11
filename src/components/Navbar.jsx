@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useToast } from '../ToastContext.jsx'
 
-export default function Navbar() {
+export default function Navbar({ onViewHistory }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const toast = useToast()
 
   useEffect(() => {
     function onScroll() {
@@ -15,9 +13,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  function trackOrder() {
-    toast('Fitur cek transaksi ada di versi lengkap 👀')
+  function goHistory() {
     setOpen(false)
+    onViewHistory()
   }
 
   return (
@@ -30,13 +28,14 @@ export default function Navbar() {
           </span>
         </a>
         <nav className="nav-links">
-          <a href="#games">Game</a>
+          <a href="#games">Katalog</a>
           <a href="#cara">Cara Top Up</a>
+          <a href="#pembayaran">Pembayaran</a>
           <a href="#promo">Promo</a>
           <a href="#faq">Bantuan</a>
         </nav>
         <div className="nav-actions">
-          <button className="btn btn-ghost" onClick={trackOrder}>Cek Transaksi</button>
+          <button className="btn btn-ghost" onClick={goHistory}>Riwayat Transaksi</button>
           <button className="hamburger" aria-label="Menu" onClick={() => setOpen((o) => !o)}>
             <span style={open ? { transform: 'translateY(6.5px) rotate(45deg)' } : undefined}></span>
             <span style={open ? { opacity: 0 } : undefined}></span>
@@ -45,11 +44,12 @@ export default function Navbar() {
         </div>
       </div>
       <div className={`nav-mobile ${open ? 'open' : ''}`}>
-        <a href="#games" onClick={() => setOpen(false)}>Game</a>
+        <a href="#games" onClick={() => setOpen(false)}>Katalog</a>
         <a href="#cara" onClick={() => setOpen(false)}>Cara Top Up</a>
+        <a href="#pembayaran" onClick={() => setOpen(false)}>Pembayaran</a>
         <a href="#promo" onClick={() => setOpen(false)}>Promo</a>
         <a href="#faq" onClick={() => setOpen(false)}>Bantuan</a>
-        <button className="btn btn-primary" onClick={trackOrder}>Cek Transaksi</button>
+        <button className="btn btn-primary" onClick={goHistory}>Riwayat Transaksi</button>
       </div>
     </header>
   )

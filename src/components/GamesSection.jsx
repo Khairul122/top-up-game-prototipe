@@ -18,8 +18,8 @@ export default function GamesSection({ onSelect }) {
   return (
     <section className="section" id="games">
       <Reveal as="div" className="section-head">
-        <h2>Lagi naik daun <span className="highlight">🔥</span></h2>
-        <p>5 game yang paling sering di-top up minggu ini. Klik buat langsung isi.</p>
+        <h2>Katalog game <span className="highlight">🔥</span></h2>
+        <p>5 game yang lagi naik daun dan paling sering di-top up minggu ini. Klik buat langsung isi.</p>
       </Reveal>
 
       <Reveal as="div" className="games-toolbar">

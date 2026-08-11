@@ -1,6 +1,6 @@
 import { useToast } from '../ToastContext.jsx'
 
-export default function Footer() {
+export default function Footer({ onViewHistory }) {
   const toast = useToast()
   return (
     <footer className="footer">
@@ -13,14 +13,15 @@ export default function Footer() {
         <div className="footer-cols">
           <div>
             <h5>Produk</h5>
-            <a href="#games">Top Up Game</a>
+            <a href="#games">Katalog Game</a>
+            <a href="#pembayaran">Metode Pembayaran</a>
             <a href="#promo">Promo</a>
             <a href="#cara">Cara Top Up</a>
           </div>
           <div>
             <h5>Bantuan</h5>
             <a href="#faq">FAQ</a>
-            <a onClick={() => toast('Fitur cek transaksi ada di versi lengkap 👀')}>Cek Transaksi</a>
+            <a onClick={onViewHistory}>Riwayat Transaksi</a>
             <a onClick={() => toast('Live chat CS ada di versi lengkap 💬')}>Hubungi CS</a>
           </div>
           <div>

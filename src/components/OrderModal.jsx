@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useToast } from '../ToastContext.jsx'
+import { useTransactions } from '../TransactionsContext.jsx'
 
 const PAY_METHODS = ['GoPay', 'DANA', 'OVO', 'ShopeePay', 'QRIS', 'Virtual Account']
 
@@ -7,8 +8,9 @@ function formatIDR(n) {
   return 'Rp' + Math.round(n).toLocaleString('id-ID')
 }
 
-export default function OrderModal({ game, onClose }) {
+export default function OrderModal({ game, onClose, onViewHistory }) {
   const toast = useToast()
+  const { addTransaction } = useTransactions()
   const [step, setStep] = useState('denom')
   const [userId, setUserId] = useState('')
   const [serverId, setServerId] = useState('')
@@ -51,7 +53,22 @@ export default function OrderModal({ game, onClose }) {
   function payNow() {
     setStep('loading')
     setTimeout(() => {
-      setTrxId('GG' + Math.floor(100000000 + Math.random() * 899999999))
+      const newTrxId = 'GG' + Math.floor(100000000 + Math.random() * 899999999)
+      setTrxId(newTrxId)
+      addTransaction({
+        id: newTrxId,
+        date: new Date().toISOString(),
+        gameId: game.id,
+        gameName: game.short,
+        icon: game.icon,
+        tile: game.tile,
+        qty: denom.qty,
+        unit: game.unit,
+        amount: total,
+        method: pay,
+        status: 'success',
+        userId: game.hasServer ? `${userId} (${serverId})` : userId,
+      })
       setStep('success')
     }, 1700)
   }
@@ -179,6 +196,18 @@ export default function OrderModal({ game, onClose }) {
             <h3>Top up berhasil!</h3>
             <p>{denom.qty.toLocaleString('id-ID')} {game.unit} sudah dikirim ke akun <strong>{userId}</strong>.</p>
             <div className="success-id">ID Transaksi: {trxId}</div>
+            {onViewHistory && (
+              <button
+                className="btn btn-primary btn-block"
+                style={{ marginBottom: 10 }}
+                onClick={() => {
+                  handleClose()
+                  onViewHistory()
+                }}
+              >
+                Lihat Riwayat Transaksi
+              </button>
+            )}
             <button className="btn btn-outline btn-block" onClick={handleClose}>Tutup</button>
           </div>
         )}
